@@ -94,11 +94,12 @@ def main():
     new_records = []
     current_file = None
     current_desc_lines = []
+    current_date = ""
     
     # Regex for "10/03/2026, 6:03 pm -" or "10/03/2026, 11:58 am -"
-    timestamp_regex = re.compile(r"^\d{2}/\d{2}/\d{4},\s\d{1,2}:\d{2}\s[a|p]m\s-")
+    timestamp_regex = re.compile(r"^(\d{2}/\d{2}/\d{4}),\s\d{1,2}:\d{2}\s[a|p]m\s-")
     
-    def process_item(file_name, desc_lines):
+    def process_item(file_name, desc_lines, message_date):
         if not file_name:
             return
             
@@ -111,6 +112,7 @@ def main():
         orig_price = 0.0
         margin = 0.0
         rounded_margin = 0
+        increased_price = 0
         our_price = 0
         mod_desc = desc
         
@@ -118,7 +120,9 @@ def main():
             orig_price = float(price_match.group(1))
             margin = orig_price * 0.35
             rounded_margin = round(margin)
-            our_price = int(orig_price + rounded_margin)
+            increased_price = int(orig_price + rounded_margin)
+            # Round off to nearest divisible by 5
+            our_price = int(round(increased_price / 5.0) * 5)
             mod_desc = desc[:price_match.start(1)] + str(our_price) + desc[price_match.end(1):]
             
         media_path = os.path.join(DATA_DIR, file_name)
@@ -126,25 +130,31 @@ def main():
         print(f"Processed new item: {file_name} -> OCR: {ocr_code if ocr_code else 'none'}")
         
         record = {
+            "Date of Message": message_date,
             "File Name": file_name,
             "Drive Link": "",
-            "Code": "",
             "Original Item Description": desc.replace('\n', ' '),
             "original price Rs. (A)": orig_price,
             "35%Margin price Rs": margin,
             "Roud Off (B)": rounded_margin,
-            "(Our Price Rs (A +B)": our_price,
+            "Increaded Price": increased_price,
+            "Our Price Rs(Round off to neareast divisible by 5)": our_price,
             "Modified Item Description": mod_desc.replace('\n', ' '),
             "Extracted Codes (OCR)": ocr_code
         }
         new_records.append(record)
 
     for line in lines:
-        if timestamp_regex.search(line):
-            process_item(current_file, current_desc_lines)
+        ts_match = timestamp_regex.search(line)
+        if ts_match:
+            process_item(current_file, current_desc_lines, current_date)
             
             current_file = None
             current_desc_lines = []
+            
+            # Format Date to YYYY-MM-DD
+            d, m, y = ts_match.group(1).split('/')
+            current_date = f"{y}-{m}-{d}"
             
             if "(file attached)" in line:
                 match = re.search(r":\s*(IMG-.*?\.jpg|VID-.*?\.mp4)\s*\(file attached\)", line)
@@ -156,7 +166,7 @@ def main():
                 if curr_line_clean != "":
                     current_desc_lines.append(curr_line_clean)
                     
-    process_item(current_file, current_desc_lines)
+    process_item(current_file, current_desc_lines, current_date)
     
     if not new_records:
         print("No new records to process. Catalog is up to date!")
