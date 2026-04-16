@@ -1,0 +1,45 @@
+OPERATION INSTRUCTIONS
+======================
+This guide provides step-by-step instructions to operate the Automate Catalog Processor either dynamically in the cloud via Google Colab or locally on your Own Device/PC.
+
+
+PART 1: OPERATING IN GOOGLE COLAB
+---------------------------------
+Running in the cloud requires zero installation, natively supports GPU acceleration for faster OCR, and saves outputs directly to your Google Drive.
+
+Step A: Prepare Google Drive
+1. Go to your Google Drive root directory (My Drive).
+2. Create a folder named exactly "Automate". 
+3. Inside Automate, create another folder named "Whatsapp_chats_export","Data". (Ignore if these folders already exist).
+4. Export your chat data as an archive directly from WhatsApp.
+5. Upload this .zip file from your device into the Whatsapp_chats_export/ folder on Google Drive.
+
+Step B: Load the Notebook
+1. Go to colab.research.google.com
+2. Click Upload and select process_catalog_colab.ipynb from your local computer or load from drive.
+
+Step C: Execute Automation
+1. Set the runtime to use a GPU for blazing fast image scanning (Top Menu > Runtime > Change runtime type > Select T4 GPU > Save).
+2. Click the 'Play' button beside each cell from top to bottom or Run --> Run all
+3. The notebook will automatically import the .zip archive from your Google Drive, parse images, calculate price margins, filter duplicates, and finally save your Processed_Catalog sheets directly back into your Automate/ Drive folder!
+
+
+PART 2: OPERATING LOCALLY ON OWN DEVICE (PC)
+--------------------------------------------
+If you prefer running the script on your own hardware without utilizing Google Drive, use this method.
+
+Step A: Install Requirements
+1. Ensure Python 3.x is installed on your computer.
+2. Open a terminal or Command Prompt in the project directory.
+3. Run the following command to download necessary libraries:
+   pip install -r requirements.txt
+
+Step B: Provide the Data
+1. You will see a folder named "Whatsapp_chats_export","Data" in the project directory. (Create it if missing).
+2. Place your newly exported WhatsApp .zip file directly into this folder.
+
+Step C: Execute Script
+1. Open your terminal in the project directory.
+2. Run the primary processing script:
+   python process_catalog.py
+3. The script will automatically detect the .zip file, extract all the images and text logs to the internal Data/ folder, run the deduplication and price calculations, and dump the completed excel/csv catalogs directly in the main folder for you to open instantly.

@@ -1,0 +1,28 @@
+{
+    "columns": [
+        "Date of Message",
+        "File Name",
+        "Drive Link",
+        "Original Item Description",
+        "original price Rs. (A)",
+        "35%Margin price Rs",
+        "Roud Off (B)",
+        "Increaded Price",
+        "Our Price Rs(Round off to neareast divisible by 5)",
+        "Modified Item Description",
+        "Extracted Codes (OCR)"
+    ],
+    "first_row": {
+        "Date of Message": "2026-03-10",
+        "File Name": "IMG-20260310-WA0002.jpg",
+        "Drive Link": "nan",
+        "Original Item Description": "*New Micro Gold  Mangalsutra Combo set* Length- 34Inch Price -540rs FREE SHIPPING ALL OVER INDIA\ud83d\ude0a",
+        "original price Rs. (A)": "540",
+        "35%Margin price Rs": "189.0",
+        "Roud Off (B)": "189",
+        "Increaded Price": "729",
+        "Our Price Rs(Round off to neareast divisible by 5)": "730",
+        "Modified Item Description": "*New Micro Gold  Mangalsutra Combo set* Length- 34Inch Price -730rs FREE SHIPPING ALL OVER INDIA\ud83d\ude0a",
+        "Extracted Codes (OCR)": "Code-1110, SAC, M1O4B, N2ZON, 7810044, 8919534, No.3800, 5 A, L34 inch"
+    }
+}
